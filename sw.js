@@ -1,5 +1,5 @@
-const CACHE = 'run2again-v1';
-const CORE  = ['./index.html', './manifest.json', './icon-192.png', './icon-512.png'];
+const CACHE = 'run2again-v2';
+const CORE  = ['./', './index.html', './manifest.json', './icon-192x192.png', './icon-512x512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -26,6 +26,6 @@ self.addEventListener('fetch', e => {
         caches.open(CACHE).then(c => c.put(e.request, clone));
         return r;
       })
-      .catch(() => caches.match(e.request).then(r => r || new Response('', { status: 503 })))
+      .catch(() => caches.match(e.request).then(r => r || caches.match('./index.html')))
   );
 });
