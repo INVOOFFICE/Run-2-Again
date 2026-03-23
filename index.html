@@ -2249,42 +2249,9 @@ window.onload=async function(){
 
   // ── 3. Service Worker ──
   if('serviceWorker' in navigator){
-    const swCode = `
-const CACHE = 'run2again-v1';
-const CORE  = ['./'];
-
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
-});
-
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', e => {
-  if(e.request.method !== 'GET') return;
-  e.respondWith(
-    fetch(e.request)
-      .then(r => {
-        const clone = r.clone();
-        caches.open(CACHE).then(c => c.put(e.request, clone));
-        return r;
-      })
-      .catch(() => caches.match(e.request).then(r => r || new Response('', { status: 503 })))
-  );
-});
-`;
-    try {
-      const swBlob = new Blob([swCode], { type: 'application/javascript' });
-      const swUrl  = URL.createObjectURL(swBlob);
-      navigator.serviceWorker.register(swUrl, { scope: './' })
-        .then(reg => console.log('[PWA] SW enregistré:', reg.scope))
-        .catch(err => console.warn('[PWA] SW erreur:', err));
-    } catch(e) { console.warn('[PWA] SW:', e); }
+    navigator.serviceWorker.register('./sw.js', { scope: './' })
+      .then(reg => console.log('[PWA] SW enregistré ✓', reg.scope))
+      .catch(err => console.warn('[PWA] SW erreur:', err));
   }
 })();
 
