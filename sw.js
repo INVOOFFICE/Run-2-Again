@@ -1,5 +1,5 @@
-const CACHE = 'run2again-v2';
-const CORE  = ['./', './index.html', './manifest.json', './icon-192x192.png', './icon-512x512.png'];
+const CACHE = 'run2again-v3';
+const CORE  = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
